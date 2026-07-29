@@ -63,7 +63,46 @@ Python-for-cybersecurity/
 ```
 
 ---
+## Getting Started
+### Prerequisites
+Python 3.11 or later
+pip
+Virtual environment (recommended)
 
+Clone the repository:
+
+git clone https://github.com/Agneta-mkng/Python-for-Cybersecurity.git
+cd Python-for-Cybersecurity
+
+Create a virtual environment (optional but recommended):
+
+python -m venv .venv
+
+Activate it:
+
+** Windows **
+
+.venv\Scripts\activate
+
+** Linux/macOS **
+
+source .venv/bin/activate
+
+Install dependencies (when available):
+
+pip install -r requirements.txt
+---
+
+## How to Use This Repository
+
+You can follow the repository in the same order I am learning:
+
+1. Read the notes to understand the concepts.
+2. Explore the example scripts.
+3. Complete the corresponding projects.
+4. Use the cheat sheets for quick reference.
+5. Compare your solutions and experiment further.
+---
 ## Notes
 
 The `notes/` directory contains my learning documentation.
@@ -146,3 +185,7 @@ This repository serves as:
 - A reference library for Python security programming
 - A portfolio of practical projects
 - A record of my technical growth
+---
+> ⚠️ **Disclaimer:** 
+This repository is strictly for educational purposes and defensive security training. Tools and scripts contained here must only be run on systems you own or have explicit written permission to analyze.
+
