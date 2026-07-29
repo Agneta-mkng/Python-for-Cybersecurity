@@ -79,8 +79,8 @@ A socket object is created using socket.socket()
 
 The socket type is specified as socket.SOCK_STREAM for Transmission Control Protocol and socket.SOCK_DGRAM for User Datagram Protocol.
 
-> TCP is a connection-oriented protocol that provides reliable communication by:
-> 
+TCP is a connection-oriented protocol that provides reliable communication by:
+
 - Guaranteeing packet delivery
 - Delivering packets in order
 - Detecting transmission errors
@@ -90,6 +90,7 @@ The socket type is specified as socket.SOCK_STREAM for Transmission Control Prot
 The lifecycle is split into two;the server side lifecycle and the client side lifecycle.
 
 *1. Server-Side Lifecycle (passive open)*
+
 The server sits in a listening state waiting for incoming connections.
 1. socket () - Creates an endpoint for communication.
 2. bind() - Assigns an IP address and port number to the socket.
@@ -99,6 +100,7 @@ The server sits in a listening state waiting for incoming connections.
 6. close() - Initiates  connection tear down via the **4-way handshake** (FIN—>ACK—>FIN—>ACK).
 
 *2. Client-Side Lifecycle (Active Open)*
+
 The client reaches out to initiate a connection.
 1. socket() - Creates the client socket.
 2. connect() - Initiates the connection to the server's IP and port. This automatically triggers the **TCP 3-Way Handshake** .
@@ -116,7 +118,7 @@ The TCP three-way handshake:
 
 ---
 
-##### Blocking Behavior
+#### Blocking Behavior
 
 By default, sockets operate in **blocking mode**.
 
