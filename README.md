@@ -1,5 +1,5 @@
 # Python-for-Cybersecurity
-Python security programming notes,projects and examples as i document my cybersecurity learning journey.
+Python security programming notes,projects and examples as I document my cybersecurity learning journey.
 
 ## Learning Objectives
 
@@ -72,6 +72,7 @@ Virtual environment (recommended)
 Clone the repository:
 
 git clone https://github.com/Agneta-mkng/Python-for-Cybersecurity.git
+
 cd Python-for-Cybersecurity
 
 Create a virtual environment (optional but recommended):
@@ -88,9 +89,6 @@ Activate it:
 
 source .venv/bin/activate
 
-Install dependencies (when available):
-
-pip install -r requirements.txt
 ---
 
 ## How to Use This Repository
