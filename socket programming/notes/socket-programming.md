@@ -18,7 +18,7 @@ Berkeley Sockets API is the standard programming interface that is used by most 
 - .connect() - Enables client to connect to a server.
 - .connect_ex() - Similar to connect() but it returns an error indicator code instead of raising an exception when it fails.
 - .send() -Sends data to a connected socket.
-- .recv() - Receives bytes from a connected socket. If no data is available, it blocks by default until data arrives or the connection closes.
+- .recv() - Receives bytes from a connected socket. If no data is available, it blocks by default until data arrives or the connection closes. When recv(1024) returns an empty byte string (b''), it does not mean there is no data; it means the remote peer has cleanly closed their side of the connection.
 - .close() - Closes a socket and releases all resources associated with it.
 
 Note
@@ -70,7 +70,7 @@ The constructor accepts up to four parameters, though most programs specify only
 
 1. Address family _ This includes AF_INET, AF_INET6 or AF_UNIX. Default is AF_INET.
 2.  Socket type - Entails either SOCK_STREAM for TCP, SOCK_DGRAM for UDP. Default is SOCK_STREAM.
-3. Protocol number - Usually left as 0 (zero), allowing the operating system to automatically choose the correct protocol for the selected address family and socket type.
+3. Protocol number - Usually left as 0 (zero), allowing the operating system to automatically choose the correct protocol for the selected address family and socket type. One can explicitly find these protocol numbers using `socket.getprotobyname('tcp') `which returns 6 or `socket.getprotobyname('udp')`  which returns 17.
 4. File descriptor - An integer handle managed by the operating system that identifies an open file, socket, or other I/O resource. This parameter is rarely supplied directly by user programs.
 ---
 ## TCP sockets
@@ -96,7 +96,7 @@ The server sits in a listening state waiting for incoming connections.
 2. bind() - Assigns an IP address and port number to the socket.
 3. listen() - Puts the socket into passive mode, allowing it to queue incoming connection requests.
 4.  accept() - Blocks and waits for a client. When a client connects, it completes the **3-way handshake** (SYN —>SYN-ACK —>ACK) and creates a new **dedicated** socket strictly for that client's session. The original listening socket continues accepting additional clients.
-5. recv() /send() - Reads data from the client and sends responses back.
+5. recv() /send() - Reads data from the client and sends responses back. 
 6. close() - Initiates  connection tear down via the **4-way handshake** (FIN—>ACK—>FIN—>ACK).
 
 *2. Client-Side Lifecycle (Active Open)*
@@ -131,3 +131,58 @@ For example:
 - connect() waits until a connection is established or fails.
 
 Sockets can also be configured to operate in **non-blocking mode** or with **timeouts**, allowing programs to continue executing while waiting for network events.
+
+## Addressing and ports
+
+IP address helps in identifying the computer on the network while port identifies the service on the device.
+
+The ipaddress module provides functions used to create ip addresses,networks and interfaces.
+
+### Ip address
+
+#### *Functions*
+
+- `ipaddress.ip_address( address )`
+
+ This returns either an IPv4 or IPv6 based on the address that was passed as a parameter.
+
+- `ipaddress.ip_network( address,strict=True )`
+
+Creates an Ip network object hence expects the address given to be a network address.  Strict= true requires that address provided is the network address otherwise a ValueError is raised while strict =false allows one to enter any ip address in the network and python automatically calculates the network address. This is very important in input validation.
+
+- `ipaddress.ip_interface (address)`
+
+Returns an IPv4 or IPv6 interface depending on the object passed as parameter. A ValueError is raised in case the address is an invalid IPv4 or Ipv6 address.
+An interface object represents an IP address pinned to a specific network. 
+
+#### *Address objects*
+
+Address objects are hashable hence can be used as keys in dictionaries.
+
+1. `ipaddress.IPv4Address( address ) `
+
+Constructs an IPv4 address. An AddressValueError is raised in case the address is an invalid IPv4 address.
+
+2. `ipaddress.IPv6Address( address ) `
+
+Constructs an IPv6 address.
+
+*Note*
+
+For an address to interoperate with networking interfaces  addresses must be converted to strings or integers.
+
+This is handled using the str() and int() inbuilt functions.
+
+For example `str(ipaddress.IPv4Address('192.168.0.1'))`
+
+IPv6 scoped addresses are converted to integers without scope zone id.
+
+#### *Operators*
+
+Address objects support some operators. 
+
+For example; 
+
+Comparison **(`<`, `>`, `==`)**: Addresses are compared by their numerical value.
+
+Arithmetic **(`+`, `-`)**: Adding an integer increments the IP address to the next one in sequence. Subtracting finds the preceding IP.
