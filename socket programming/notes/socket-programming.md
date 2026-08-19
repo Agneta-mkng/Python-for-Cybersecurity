@@ -34,7 +34,8 @@ It does not establish a connection with clients. It only prepares the socket to 
 The accept() method accepts an incoming connection request.
 It returns:
 - A new socket object used for communication with the client
-- The client's address
+- The client's address.  
+
 The original server socket continues listening for additional connections.
 
 ### Socket families
