@@ -32,7 +32,6 @@ def ipv4_udp_socket():
      s.close()
 
 
-
 def ipv6_create_tcp():
     with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as st:
     #IPv6 uses four tuple format for address;host,port,flow_info and scope_id
@@ -49,6 +48,7 @@ def ipv6_create_udp():
       print(f"The IPv6 udp socket is bound to {address [0]} and port{address [1]}")
     finally:
       st.close()
+
 
 #Example function call
 ipv4_tcp_socket()
