@@ -1,6 +1,5 @@
 import socket
 
-#TCP server
 def server():
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     address = ("127.0.0.1",8080)
