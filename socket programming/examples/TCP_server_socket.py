@@ -27,8 +27,8 @@ def server():
     print(f"Connection is received from {address}")
     while True:
         received_data = conn.recv(1024)
-# recv() returns the received data as bytes.
-# Decode the bytes into a string so we can interpret it as text.
+    # recv() returns the received data as bytes.
+    # Decode the bytes into a string so we can interpret it as text.
 
         if not received_data:
             break
@@ -41,8 +41,9 @@ def server():
 
     conn.close()
     s.close()
-# s is the listening socket in this code while conn is the connected socket used to communicate with client
-
+    # s is the listening socket in this code while conn is the connected socket used to communicate with client
+if __name__ == "__main__":
+    server()
         
 
 

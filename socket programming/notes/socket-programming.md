@@ -96,7 +96,7 @@ The server sits in a listening state waiting for incoming connections.
 1. socket () - Creates an endpoint for communication.
 2. bind() - Assigns an IP address and port number to the socket.
 3. listen() - Puts the socket into passive mode, allowing it to queue incoming connection requests.
-4.  accept() - Blocks and waits for a client. When a client connects, it completes the **3-way handshake** (SYN —>SYN-ACK —>ACK) and creates a new **dedicated** socket strictly for that client's session. The original listening socket continues accepting additional clients.
+4. accept() - Blocks and waits for a client. When a client connects, it completes the **3-way handshake** (SYN —>SYN-ACK —>ACK) and creates a new **dedicated** socket strictly for that client's session. The original listening socket continues accepting additional clients.
 5. recv() /send() - Reads data from the client and sends responses back. 
 6. close() - Initiates  connection tear down via the **4-way handshake** (FIN—>ACK—>FIN—>ACK).
 
