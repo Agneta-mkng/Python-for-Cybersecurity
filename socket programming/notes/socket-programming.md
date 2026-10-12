@@ -78,29 +78,29 @@ The constructor accepts up to four parameters, though most programs specify only
 
 A socket object is created using socket.socket()
 
-The socket type is specified as socket.SOCK_STREAM for Transmission Control Protocol and socket.SOCK_DGRAM for User Datagram Protocol.
+In Python,the socket type is specified as socket.SOCK_STREAM for Transmission Control Protocol and socket.SOCK_DGRAM for User Datagram Protocol.
 
 TCP is a connection-oriented protocol that provides reliable communication by:
 
-- Guaranteeing packet delivery
+- Ensuring reliable delivery as long as the connection is viable.
 - Delivering packets in order
 - Detecting transmission errors
 - Re-transmitting lost packets
 
 ### TCP socket lifecycle.
-The lifecycle is split into two;the server side lifecycle and the client side lifecycle.
+The lifecycle is split into two: the server side lifecycle and the client side lifecycle.
 
-*1. Server-Side Lifecycle (passive open)*
+*Server-Side Lifecycle (passive open)*
 
 The server sits in a listening state waiting for incoming connections.
 1. socket () - Creates an endpoint for communication.
 2. bind() - Assigns an IP address and port number to the socket.
 3. listen() - Puts the socket into passive mode, allowing it to queue incoming connection requests.
-4. accept() - Blocks and waits for a client. When a client connects, it completes the **3-way handshake** (SYN —>SYN-ACK —>ACK) and creates a new **dedicated** socket strictly for that client's session. The original listening socket continues accepting additional clients.
+4. accept() - Accepts an incoming connectiom requests. In blocking mode it waits until the connection is created. When a client connects, it completes the **3-way handshake** (SYN —>SYN-ACK —>ACK) and creates a new **dedicated** socket strictly for that client's session. The original listening socket continues accepting additional clients.
 5. recv() /send() - Reads data from the client and sends responses back. 
 6. close() - Initiates  connection tear down via the **4-way handshake** (FIN—>ACK—>FIN—>ACK).
 
-*2. Client-Side Lifecycle (Active Open)*
+*Client-Side Lifecycle (Active Open)*
 
 The client reaches out to initiate a connection.
 1. socket() - Creates the client socket.
@@ -118,6 +118,29 @@ The TCP three-way handshake:
 - Ensures both the client and server are ready to exchange data.
 
 ---
+
+## UDP Sockets  
+This is a connectionless communication protocol. Some of the characteristics of UDP are;  
+
+- Does not guarantee data delivery or packet ordering. Datagrams may be lost, duplicated or transmitted out of order.  
+- Does not provide a built in mecahnism for retransmission for the lost packets.  
+- Less overhead compared to TCP because it does not establish a connection before data can be sent.  
+
+### UDP socket lifecycle  
+*Server side lifecycle*
+1. Create socket.  
+2. Bind socket to an address.  
+3. Receive data using `recvfrom()`  
+4. Send reply to the client using `sendto()`  
+5. Close the socket once communication is complete.  
+
+*Client side lifecycle*  
+1. Create socket.  
+2. Optionally bind socket to a local address.  
+3. Send data to the server. `sendto ()`  
+4. Receive reply from the server. `recvfrom()`  
+5. Close the socket once the communication is complete.  
+
 
 #### Blocking Behavior
 
