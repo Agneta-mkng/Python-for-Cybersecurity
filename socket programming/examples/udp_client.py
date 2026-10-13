@@ -4,7 +4,7 @@ def udp_client():
     address = ("127.0.0.1",8080)
 
     u = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-    u.timeout(10)
+    u.settimeout(10)
     try:
         while True:
             message = input("Message to send to server(Type 'exit' to quit)")
@@ -19,6 +19,7 @@ def udp_client():
                 decoded = received.decode('UTF-8')
 
                 print(f"Reply from the server: {decoded}")
+                print(f"The server address is {server_address}")
             except socket.timeout:
                 #Incase no reply arrives before the timeout
                 print("No reply from the server")
@@ -30,4 +31,4 @@ def udp_client():
 if __name__ == "__main__" :
     udp_client()      
 
-
+ 

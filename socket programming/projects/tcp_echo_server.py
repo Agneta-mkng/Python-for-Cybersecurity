@@ -39,6 +39,10 @@ def echo_server():
         # back to the client after receiving it. "received" is already a bytes
         # object, so it can be sent directly through the connected socket without decoding it.
 
+        #when the client types exit,the connection is closed
+        if received.decode('UTF-8').lower() == "exit":
+            break
+        
         conn.sendall(received)
 
     conn.close()
