@@ -33,34 +33,23 @@ Progress will be updated as I complete each section.
 
 ---
 
-## Repository Structure
+## Repository Structure  
 
+This is the repository structure for each topic handled in this learning journey.
 ```
-Python-for-cybersecurity/
+The topic/
 
 ├── README.md
 
 ├── notes/
-│   ├── 01-socket-programming.md
-│   ├── 02-network-requests.md
-│   └── ...
 
 ├── examples/
-│   ├── sockets/
-│   ├── requests/
-│   └── ...
 
 ├── projects/
-│   ├── 01-port-scanner/
-│   ├── 02-banner-grabber/
-│   └── ...
 
 ├── cheatsheets/
-│   ├── socket-cheatsheet.md
-│   ├── regex-cheatsheet.md
-│   └── ...
 
-└── images/
+├── images/
 ```
 
 ---

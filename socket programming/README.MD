@@ -13,3 +13,6 @@ This roadmap serves as a reference point for sequential revison.
  4. TCP client sockket.py  
  5. UDP server socket.py  
  6. UDP client.py
+
+# Projects  
+1. TCP echo server.py
