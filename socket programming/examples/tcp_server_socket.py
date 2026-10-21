@@ -24,7 +24,7 @@ def server():
     s.listen(5)
 
     conn,address = s.accept()
-    #accept() returns two values, a new socket object representing the estbalished connection and the client address.
+    #accept() returns two values, a new socket object representing the established connection and the client address.
     print(f"Connection is received from {address}")
     while True:
         received_data = conn.recv(1024)

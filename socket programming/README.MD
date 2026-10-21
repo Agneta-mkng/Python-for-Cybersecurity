@@ -16,3 +16,8 @@ This roadmap serves as a reference point for sequential revison.
 
 # Projects  
 1. TCP echo server.py
+2. Multi-client chat server
+
+# Cheatsheets
+1. Socket DNS
+2. Socket TCP

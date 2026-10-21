@@ -1,6 +1,6 @@
 # Introduction
 In the previous topic,the Python socket module has been used to establish communication between the client and the server.  
-A basic server is meant to handle one client at a time which becomes a limitation because other clients have to wait while the server communicates with the first client.  
+A basic sequential server is meant to handle one client at a time which becomes a limitation because other clients have to wait while the server communicates with the first client.  
 The existing TCP server will be modified so that it can communicate with several clients at a time.
 The main issues handled are: blocking operations,concurrency,threading and client management.  
 
@@ -12,7 +12,8 @@ The pending connection might be waiting in the operating system's connection que
 
 # Concurrency
 Concurrency is handling multiple tasks at the same time by overlapping their execution periods instead of finishing one task before starting the next one.   
-Depending on the implementation and available resources,the tasks can be executed in parallel or even take turns in being executed.  
+Depending on the implementation and available resources,the tasks can be executed in parallel or even take turns in being executed.   
+In concurrency,multiple tasks make progress during overlapping periods while in parallelism,multiple tasks execute simultaneously, typically on different CPU cores 
 
 
 ## Sequential handling vs concurrency handling  
@@ -24,7 +25,7 @@ Depending on the implementation and available resources,the tasks can be execute
 |A basic single-client server exhibits this behaviour| A threaded server exhibits this behaviour|  
   
   
-Concurrency can be handled using threading and asynchronous programming.
+Concurrency can be handled in many ways including threading and asynchronous programming.
 
 ## Threading  
 A new thread is created for each accepted connection using Python's threading module. Each thread can communicate with its assigned client independently.  
