@@ -23,8 +23,7 @@ Progress will be updated as I complete each section.
 | Network Requests | ⬜ Not Started |
 | Packet Analysis with Scapy | ⬜ Not Started |
 | Regular Expressions | ⬜ Not Started |
-| Multithreading | ⬜ Not Started |  
-| File handling and hashing | ⬜ Not Started |  
+| Multithreading | ⬜ Not Started |   
 | Subprocess Module | ⬜ Not Started |
 | Argparse | ⬜ Not Started |
 | JSON and APIs | ⬜ Not Started |
