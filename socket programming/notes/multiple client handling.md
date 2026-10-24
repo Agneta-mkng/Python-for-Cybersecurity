@@ -95,7 +95,7 @@ The main components include:
     • CPU-intensive operations require additional handling to prevent delays in other tasks.  
 
 ### Application in a multi-client server
-An asynchronous server can use asyncio.`start_server()` to accept client connections and invoke an asynchronous handler for each connection.
+An asynchronous server can use asyncio `start_server()` to accept client connections and invoke an asynchronous handler for each connection.
 Unlike a thread-per-client server, it can manage many connections through asynchronous tasks running on an event loop.
 **Important distinction:** Asynchronous programming does not automatically mean parallel execution. Its main advantage in a chat server is that it can manage many I/O-bound tasks efficiently.
 

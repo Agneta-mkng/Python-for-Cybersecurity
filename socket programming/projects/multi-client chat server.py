@@ -37,7 +37,7 @@ def handle_client(client_socket,address):
 def server():
     m = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     m.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-    addr = ("127.0.0.1",8080)
+    addr = ("0.0.0.0",8080)
 
     m.bind(addr)
     m.listen(5)
