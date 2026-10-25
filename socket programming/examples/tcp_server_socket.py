@@ -26,6 +26,7 @@ def server():
     conn,address = s.accept()
     #accept() returns two values, a new socket object representing the established connection and the client address.
     print(f"Connection is received from {address}")
+    
     while True:
         received_data = conn.recv(1024)
     # recv() returns the received data as bytes.
