@@ -11,10 +11,18 @@ To execute this program:
 
 import socket
 import threading
+max_message_length = 1024
+
+def send_error(client_socket,text):
+    try:
+        client_socket.sendall((text + "\n").encode("UTF-8"))
+    except OSError:
+        pass
 
 def handle_client(client_socket,address):
     print(f"Client connected on{address} ")
-
+    message_buffer = b""
+    
     try:
         while True:          
             data = client_socket.recv(1024)
@@ -22,18 +30,41 @@ def handle_client(client_socket,address):
             if not data:
                 break
 
-            message = data.decode('UTF-8')
-            print(f"Received the following from the client {message}")
-            response = f" {message}"
+            message_buffer += data
+             # message_buffer holds the leftover data plus the latest chunk.
+            # Data longer than one recv() call arrives in several chunks.
 
-            client_socket.sendall(response.encode('UTF-8'))
+            while b"\n" in message_buffer:
+                line,message_buffer = message_buffer.split(b"\n",1)
+                #Split cuts at the first new line and returns two variables,the complete message and everything left after it
+
+                #check 1 : A complete message that is too long
+                if len(line) > max_message_length:
+                    send_error(client_socket,"Error : message too long")
+                    return 
+                
+                message = line.decode('UTF-8')
+                
+                if not message.strip():
+                    send_error(client_socket,"Error: message is empty")
+                    continue
+
+                if not message.isprintable():
+                    send_error(client_socket,"Error : message contains invalid characters")
+                    continue
+
+                print(f"Received the following from the client: {message}")
+                response = f" {message}\n"
+                client_socket.sendall(response.encode('UTF-8'))
+
+                # check 2 : the remaining incomplete message is too long
+                if len(message_buffer) > max_message_length:
+                    send_error(client_socket,"Error : message too long")
+                    return
 
     except UnicodeDecodeError:
-        print("Non-UTF 8 data received.")
-        try:
-            client_socket.sendall(b"Error:invalid message encoding")
-        except OSError as e:
-            pass 
+        print("Non-UTF 8 data received from {address}.")
+        send_error(client_socket, "Error : invalid message encoding")
         
     except OSError as e:
         print(f"Connection error with {address}:{e}")

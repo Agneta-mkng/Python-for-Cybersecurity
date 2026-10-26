@@ -11,12 +11,12 @@ def client():
     while user_input.strip().lower() != "bye":
         #convert the user input(string) into bytes before sending it over the network.
         try:
-            encoded_data = user_input.encode('UTF-8')
+            encoded_data = (user_input + "\n").encode('UTF-8')
         except UnicodeEncodeError:
             print("Unable to encode the message as UTF-8")
             user_input = input()
             continue
-        c.sendall(encoded_data)
+        c.sendall(encoded_data )
 
         # The client is expecting a response from the server. recv() returns response as bytes.
         # The current server only receives and prints the client's
