@@ -11,7 +11,12 @@ To execute this program:
 
 import socket
 import threading
-max_message_length = 1024
+
+max_message_length = 1024,
+idle_timeout = 10
+max_clients = 4
+active_clients = 0
+client_lock = threading.Lock()
 
 def send_error(client_socket,text):
     try:
@@ -20,6 +25,8 @@ def send_error(client_socket,text):
         pass
 
 def handle_client(client_socket,address):
+    global active_clients
+    client_socket.settimeout(idle_timeout)
     print(f"Client connected on{address} ")
     message_buffer = b""
     
@@ -31,7 +38,7 @@ def handle_client(client_socket,address):
                 break
 
             message_buffer += data
-             # message_buffer holds the leftover data plus the latest chunk.
+            # message_buffer holds the leftover data plus the latest chunk.
             # Data longer than one recv() call arrives in several chunks.
 
             while b"\n" in message_buffer:
@@ -63,17 +70,24 @@ def handle_client(client_socket,address):
                     return
 
     except UnicodeDecodeError:
-        print("Non-UTF 8 data received from {address}.")
+        print(f"Non-UTF 8 data received from {address}.")
         send_error(client_socket, "Error : invalid message encoding")
+
+    except socket.timeout:
+        send_error(client_socket,"Error : Connection timed out")
         
     except OSError as e:
         print(f"Connection error with {address}:{e}")
 
     finally:
         client_socket.close()
+        with client_lock:
+            active_clients -=1
+
         print("The socket is closed.")
 
 def server():
+    global active_clients
     m = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     m.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
     addr = ("127.0.0.1",8080)
@@ -85,14 +99,27 @@ def server():
     try:
         while True:
             client_socket,address = m.accept()
+            with client_lock:
+                if active_clients >= max_clients:
+                    accepted = False
+                else: 
+                    active_clients +=1
+                    accepted = True
+
+            if not accepted:
+                print(f"Rejected {address}: server full")
+                send_error(client_socket, "Error : server is full")
+                client_socket.close()
+                continue
+
             thread = threading.Thread(
                 target = handle_client,
                 args = (client_socket,address),
                 daemon = True
-            )
+                )
             #Start the worker thread so that handle_client can execute.
             thread.start()
-
+                   
     except KeyboardInterrupt:
         print("The server is shutting down.")
 
