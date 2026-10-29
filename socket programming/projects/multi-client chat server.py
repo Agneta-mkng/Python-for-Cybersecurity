@@ -11,12 +11,15 @@ To execute this program:
 
 import socket
 import threading
+import time
 
-max_message_length = 1024,
+max_message_length = 1024
 idle_timeout = 10
 max_clients = 4
 active_clients = 0
 client_lock = threading.Lock()
+max_messages = 5
+rate_window = 1
 
 def send_error(client_socket,text):
     try:
@@ -27,8 +30,11 @@ def send_error(client_socket,text):
 def handle_client(client_socket,address):
     global active_clients
     client_socket.settimeout(idle_timeout)
-    print(f"Client connected on{address} ")
+    print(f"Client connected on {address} ")
     message_buffer = b""
+    message_count = 0
+    window_start = time.monotonic()
+
     
     try:
         while True:          
@@ -52,26 +58,40 @@ def handle_client(client_socket,address):
                 
                 message = line.decode('UTF-8')
                 
+                now = time.monotonic()
+
+                if now - window_start >= rate_window:
+                # Rate limiting: allow at most max_messages per rate_window seconds.
+                # If the current window has run out, start a new one and reset the count.
+                    window_start = now
+                    message_count = 0
+    
+                message_count += 1               
+
+                if message_count > max_messages:
+                    send_error(client_socket, "Error : Rate limit exceeded")
+                    return
+                
                 if not message.strip():
-                    send_error(client_socket,"Error: message is empty")
+                    send_error(client_socket,"Error : Message is empty")
                     continue
 
                 if not message.isprintable():
-                    send_error(client_socket,"Error : message contains invalid characters")
+                    send_error(client_socket,"Error : Message contains invalid characters")
                     continue
 
                 print(f"Received the following from the client: {message}")
                 response = f" {message}\n"
                 client_socket.sendall(response.encode('UTF-8'))
 
-                # check 2 : the remaining incomplete message is too long
-                if len(message_buffer) > max_message_length:
-                    send_error(client_socket,"Error : message too long")
-                    return
+            # check 2 : the remaining incomplete message is too long
+            if len(message_buffer) > max_message_length:
+                send_error(client_socket,"Error : Message too long")
+                return
 
     except UnicodeDecodeError:
         print(f"Non-UTF 8 data received from {address}.")
-        send_error(client_socket, "Error : invalid message encoding")
+        send_error(client_socket, "Error : Invalid message encoding")
 
     except socket.timeout:
         send_error(client_socket,"Error : Connection timed out")
