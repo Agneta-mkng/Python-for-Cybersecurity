@@ -26,7 +26,7 @@ def send_error(client_socket,text):
         client_socket.sendall((text + "\n").encode("UTF-8"))
     except OSError:
         pass
-
+      
 def handle_client(client_socket,address):
     global active_clients
     client_socket.settimeout(idle_timeout)
