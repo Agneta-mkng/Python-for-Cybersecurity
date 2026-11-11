@@ -1,6 +1,7 @@
 import socket
 import threading
 import time
+import ssl
 
 max_message_length = 1024
 idle_timeout = 10
@@ -145,11 +146,15 @@ def server():
     global active_clients
     m = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     m.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    hostname = "local host"
     addr = ("127.0.0.1",8080)
+    context = ssl.create_default_context() #creates the secure connection used for handshak
 
-    m.bind(addr)
-    m.listen(5)
-    print(f"Server is listening on {addr}")
+    with context.wrap_socket(m,server_hostname=hostname) as sock:
+        #SSLContext.wrap_socket() takes the active and unencrypted socket,m and wraps it into the encrypted SSLsocket object
+        m.bind(addr)
+        m.listen(5)
+        print(f"Server is listening on {addr}")   
 
     try:
         while True:
