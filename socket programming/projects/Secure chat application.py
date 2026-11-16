@@ -4,7 +4,7 @@ import time
 import ssl
 
 max_message_length = 1024
-idle_timeout = 10
+idle_timeout = 30
 max_clients = 4
 active_clients = 0
 client_lock = threading.Lock()
@@ -14,6 +14,8 @@ max_login_attempts = 3
 users = {"Bob": "pass123"}
 #For now a dictionary will be used to store the credentials.
 #Later on hashing will be introduced when learning about file handling and hashing.
+context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER) #Creates container  for the server settings
+context.load_cert_chain(certfile="certs/server.crt",keyfile="certs/server.key")
 
 def read_line(client_socket,message_buffer):
    while True:
@@ -60,6 +62,7 @@ def authenticate(client_socket,message_buffer):
             return True,message_buffer
         send_line(client_socket, "Error : Invalid login details! ")
     send_line(client_socket, "Error : Too many failed attempts")
+    return False,message_buffer
         
 def handle_client(client_socket,address):
     global active_clients
@@ -70,6 +73,7 @@ def handle_client(client_socket,address):
     window_start = time.monotonic()
     
     try:
+        client_socket = context.wrap_socket(client_socket,server_side=True)
         success, message_buffer = authenticate(client_socket,message_buffer)
         if not success:
             return
@@ -148,13 +152,9 @@ def server():
     m.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
     hostname = "local host"
     addr = ("127.0.0.1",8080)
-    context = ssl.create_default_context() #creates the secure connection used for handshak
-
-    with context.wrap_socket(m,server_hostname=hostname) as sock:
-        #SSLContext.wrap_socket() takes the active and unencrypted socket,m and wraps it into the encrypted SSLsocket object
-        m.bind(addr)
-        m.listen(5)
-        print(f"Server is listening on {addr}")   
+    m.bind(addr)
+    m.listen(5)
+    print(f"Server is listening on {addr}")   
 
     try:
         while True:
@@ -168,7 +168,6 @@ def server():
 
             if not accepted:
                 print(f"Rejected {address}: server full")
-                send_line(client_socket, "Error : server is full")
                 client_socket.close()
                 continue
 
