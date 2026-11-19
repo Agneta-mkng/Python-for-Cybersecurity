@@ -45,7 +45,7 @@ def send_line(client_socket,text):
 
 def authenticate(client_socket,message_buffer):
     for attempt in range(max_login_attempts):
-        send_line(client_socket,"Username:")
+        send_line(client_socket,"Enter the username:")
         line, message_buffer = read_line(client_socket,message_buffer)
         if line is None:
             return False,message_buffer  #client left or sent too much
